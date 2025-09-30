@@ -19,6 +19,7 @@ var gendidCmd = &cobra.Command{
 
 var (
 	handle   string
+	diddomain string
 	pubkey   string
 	hostname string
 )
@@ -28,6 +29,8 @@ func init() {
 
 	gendidCmd.Flags().StringVar(&handle, "handle", "", "Pass your handle here")
 	gendidCmd.MarkFlagRequired("handle")
+	gendidCmd.Flags().StringVar(&diddomain, "diddomain", "", "Pass the domain of your did.")
+	gendidCmd.MarkFlagRequired("diddomain")
 	gendidCmd.Flags().StringVar(&pubkey, "pubkey", "", "Pass public key from pubkey command here")
 	gendidCmd.MarkFlagRequired("pubkey")
 	gendidCmd.Flags().StringVar(&hostname, "hostname", "", "Pass hostname of PDS you want to register")
@@ -41,12 +44,12 @@ func generateDid(cmd *cobra.Command, args []string) error {
 			"https://w3id.org/security/multikey/v1",
 			"https://w3id.org/security/suites/secp256k1-2019/v1",
 		},
-		Id:          "did:web:" + handle,
+		Id:          "did:web:" + diddomain,
 		AlsoKnownAs: []string{"at://" + handle},
 		VerificationMethod: []*VerificationMethod{{
-			ID:                 "did:web:" + handle + "#atproto",
+			ID:                 "did:web:" + diddomain + "#atproto",
 			Type:               "Multikey",
-			Controller:         "did:web:" + handle,
+			Controller:         "did:web:" + diddomain,
 			PublicKeyMultibase: pubkey,
 		}},
 		Service: []*Service{{
